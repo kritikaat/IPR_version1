@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Ratings {
+  id                 Int      @id @default(autoincrement())
+  iprRating          Int
+  fciptRating        Int
+  knowledge          Int
+  explanationsIPR    Int
+  explanationsFCIPT  Int
+  knowledgeBefore    Int
+  knowledgeAfter     Int
+  technicalContents  Int
+  easeOfUnderstanding Int
+  feedbackFormId     Int      @unique
+  feedbackForm       feedbackForm @relation(fields: [feedbackFormId], references: [id])
+
+  @@map("ratings")
+}
+
+model feedbackForm {
+  id                 Int      @id @default(autoincrement())
+  institutionName    String
+  website            String
+  visitDate          DateTime
+  staffName          String
+  staffEmail         String
+  staffMobile        String
+  totalStudents      Int
+  accompanyingStaff  Int
+  sources            String[]
+  campuses           String[]
+  ratings            Ratings?
+  best               String?
+  worst              String?
+  suggestions        String?
+  comments           String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("feedback_forms")
+}
+
+model Visitor {
+  id              Int      @id @default(autoincrement())
+  institutionName String
+  studentBranch   String
+  studentSem      Int
+  numStudents     Int
+  numFaculty      Int
+  name            String
+  position        String
+  email           String
+  mobile          String
+  campus          String[]
+  ipr_time        String?
+  fcipt_time      String?
+  visit_date      DateTime
+  visit_time      String
+  materials       String[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model IPRExhibitionForm {
+    id                     Int      @id @default(autoincrement())
+    hallDimension          String
+    isEnclosedHall         String
+    canBeDarkened          String
+    hasCooling             String?
+    isGroundFloor          String
+    hasStorageSpace        String?
+    powerOutlets           Int
+    numTables              Int?
+    vrSpace                String?
+    hasWifi                String?
+    lectureHallArea        String
+    seatingCapacity        Int
+    hasAVFacilities        String?
+    distanceFromExhibition String?
+    accommodationProvided  String?
+    localTransportation    String?
+    secureParkingSpace     String?
+    manpowerForLoading     String?
+    contactPersonName      String
+    contactPersonMobile    String
+    contactPersonEmail     String
+    venueLocation          String
+    teacherInvitation      Int
+    teacherRegistration    Int
+    providesWritingMaterials String?
+    providesRefreshments   String?
+    quizForSchoolStudents  String?
+    quizTeamSelection      String?
+    quizArrangements       String?
+    quizRefreshments       String?
+}
